@@ -107,6 +107,27 @@ services:
         volumes:
             - loki_data:/loki
 
+    tempo:
+        image: grafana/tempo:2.8.2
+        container_name: tempo
+        expose:
+            - "3200"
+            - "4317"
+            - "4318"
+        ports:
+            - "127.0.0.1:3200:3200"
+        restart: unless-stopped
+        volumes:
+            - ./tempo/tempo.yaml:/etc/tempo/config.yaml:ro
+            - tempo_data:/var/tempo
+        command: ["-config.file=/etc/tempo/config.yaml"]
+        healthcheck:
+            test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://localhost:3200/ready"]
+            interval: 10s
+            timeout: 5s
+            retries: 12
+            start_period: 10s
+
     grafana:
         image: grafana/grafana:12.4.10
         container_name: grafana
@@ -142,6 +163,12 @@ services:
         image: grafana/alloy:v1.19.2
         container_name: alloy
         user: root
+        expose:
+            - "4317"
+            - "4318"
+        ports:
+            - "127.0.0.1:4317:4317"
+            - "127.0.0.1:4318:4318"
         restart: unless-stopped
         privileged: true
         devices:
@@ -165,3 +192,4 @@ volumes:
     loki_data:
     grafana_data:
     prometheus_data:
+    tempo_data:
