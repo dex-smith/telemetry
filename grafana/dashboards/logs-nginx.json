@@ -1,0 +1,82 @@
+{
+    "annotations": {
+        "list": []
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "id": null,
+    "links": [],
+    "panels": [
+        {
+            "datasource": {
+                "type": "loki",
+                "uid": "${DS_LOKI}"
+            },
+            "fieldConfig": {
+                "defaults": {},
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 24,
+                "w": 24,
+                "x": 0,
+                "y": 0
+            },
+            "id": 1,
+            "options": {
+                "dedupStrategy": "none",
+                "enableLogDetails": true,
+                "prettifyLogMessage": false,
+                "showCommonLabels": true,
+                "showLabels": true,
+                "showTime": true,
+                "sortOrder": "Descending",
+                "wrapLogMessage": false
+            },
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "loki",
+                        "uid": "${DS_LOKI}"
+                    },
+                    "editorMode": "code",
+                    "expr": "{service_name=\"nginx\"}",
+                    "queryType": "range",
+                    "refId": "A"
+                }
+            ],
+            "title": "Nginx Logs",
+            "type": "logs"
+        }
+    ],
+    "schemaVersion": 39,
+    "tags": [
+        "nginx",
+        "logs"
+    ],
+    "templating": {
+        "list": [
+            {
+                "current": {
+                    "selected": false,
+                    "text": "Loki",
+                    "value": "Loki"
+                },
+                "hide": 2,
+                "name": "DS_LOKI",
+                "type": "datasource",
+                "query": "loki"
+            }
+        ]
+    },
+    "time": {
+        "from": "now-1h",
+        "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "",
+    "title": "Logs - Nginx",
+    "uid": "logs-nginx",
+    "version": 1
+}

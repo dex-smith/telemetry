@@ -1,0 +1,56 @@
+limit_req_zone $binary_remote_addr zone=images:10m rate=5r/s;
+
+server {
+    listen 80;
+    server_name ${SERVER_NAME} www.${SERVER_NAME};
+
+    location / {
+        return 301 https://$host$request_uri;
+    }
+}
+
+server {
+    listen 443 ssl;
+    server_name ${SERVER_NAME} www.${SERVER_NAME};
+
+    ssl_certificate     ${SSL_CERTIFICATE};
+    ssl_certificate_key ${SSL_CERTIFICATE_KEY};
+    ssl_protocols       TLSv1.2 TLSv1.3;
+
+    # Default body size limit for 443 server block
+    client_max_body_size 4k;
+
+    # Global Security Headers
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+
+    limit_req_status 429;
+    limit_req_log_level warn;
+
+    location /files/ {
+        limit_req zone=images burst=10;
+        proxy_pass http://rustfs:9000;
+        client_max_body_size 5M;
+
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        proxy_connect_timeout 300;
+        proxy_http_version 1.1;
+        proxy_set_header Connection "";
+        chunked_transfer_encoding off;
+    }
+}
+
+server {
+    listen 8080;
+
+    location /nginx_status {
+        stub_status;
+        allow all;
+    }
+}

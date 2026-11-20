@@ -1,0 +1,240 @@
+{
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "Prometheus",
+          "value": "Prometheus"
+        },
+        "hide": 2,
+        "name": "DS_PROMETHEUS",
+        "type": "datasource",
+        "query": "prometheus"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "Loki",
+          "value": "Loki"
+        },
+        "hide": 2,
+        "name": "DS_LOKI",
+        "type": "datasource",
+        "query": "loki"
+      }
+    ]
+  },
+  "schemaVersion": 39,
+  "timezone": "browser",
+  "title": "Metrics - Nginx",
+  "uid": "metrics-nginx-dashboard",
+  "panels": [
+    {
+      "type": "timeseries",
+      "title": "CPU Usage per Container",
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "expr": "sum(rate(container_cpu_usage_seconds_total{name=~\"/?nginx\"}[1m])) by (name)",
+          "legendFormat": "{{name}}",
+          "refId": "A"
+        }
+      ],
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth",
+            "fillOpacity": 20,
+            "gradientMode": "opacity",
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "showPoints": "never"
+          },
+          "color": {
+            "mode": "palette-classic",
+            "scheme": "Blues"
+          }
+        }
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "Memory Usage per Container",
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 8
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "expr": "sum(container_memory_usage_bytes{name=~\"/?nginx\"}) by (name)",
+          "legendFormat": "{{name}}",
+          "refId": "A"
+        }
+      ],
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth",
+            "fillOpacity": 20,
+            "gradientMode": "opacity",
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "showPoints": "never"
+          },
+          "color": {
+            "mode": "palette-classic",
+            "scheme": "Blues"
+          }
+        }
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "Network I/O per Container (Bytes In)",
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 16
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "expr": "sum(rate(container_network_receive_bytes_total{name=~\"/?nginx\"}[1m])) by (name)",
+          "legendFormat": "{{name}}",
+          "refId": "A"
+        }
+      ],
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth",
+            "fillOpacity": 20,
+            "gradientMode": "opacity",
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "showPoints": "never"
+          },
+          "color": {
+            "mode": "palette-classic",
+            "scheme": "Blues"
+          }
+        }
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "Network I/O per Container (Bytes Out)",
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 24
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "expr": "sum(rate(container_network_transmit_bytes_total{name=~\"/?nginx\"}[1m])) by (name)",
+          "legendFormat": "{{name}}",
+          "refId": "A"
+        }
+      ],
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth",
+            "fillOpacity": 20,
+            "gradientMode": "opacity",
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "showPoints": "never"
+          },
+          "color": {
+            "mode": "palette-classic",
+            "scheme": "Blues"
+          }
+        }
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Active Connections (Nginx Prometheus)",
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 32
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "expr": "nginx_connections_active",
+          "legendFormat": "Active Connections",
+          "refId": "A"
+        }
+      ],
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      }
+    }
+  ],
+  "tags": [
+    "nginx",
+    "metrics"
+  ],
+  "version": 1
+}

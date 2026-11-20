@@ -1,0 +1,5 @@
+.env*
+
+
+# SSL Certificates
+certs/
